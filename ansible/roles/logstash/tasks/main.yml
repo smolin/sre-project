@@ -1,0 +1,24 @@
+- name: logstash
+  apt:
+    name: logstash
+
+- name: logstash config
+  copy:
+    dest: /etc/logstash/conf.d/sre-config.conf
+    content: |
+      input {
+          beats {
+              port => "5044"
+          }
+      }
+      output {
+          elasticsearch {
+              hosts => [ "elasticsearch.local:9200" ]
+          }
+      }
+
+- name: enable and start logstash
+  systemd:
+    name: logstash
+    enabled: yes
+    state: started

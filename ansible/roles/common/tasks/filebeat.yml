@@ -1,0 +1,22 @@
+- name: filebeat
+  apt:
+    name: filebeat
+
+- name: filebeat config
+  copy:
+    dest: /etc/filebeat/filebeat.yml
+    content: |
+      filebeat.prospectors:
+      - type: log
+        paths:
+          - /var/log/syslog
+      output.logstash:
+        hosts: ["logstash.local:5044"]
+      setup.kibana:
+        host: "kibana.local:5601"
+
+- name: filebeat enable and start
+  systemd:
+    name: filebeat
+    enabled: yes
+    state: started
