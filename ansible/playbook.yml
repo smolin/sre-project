@@ -1,0 +1,24 @@
+---
+- hosts: all
+  become: true
+  roles:
+    - common
+
+- hosts: logstash
+  become: true
+  roles:
+    - logstash
+
+- hosts: elasticsearch
+  become: true
+  roles:
+    - { role: elasticsearch, es_instance_name: "node1",
+        es_config: {
+          network.host: "elasticsearch.local"
+        }
+      }
+
+- hosts: kibana
+  become: true
+  roles:
+    - kibana
